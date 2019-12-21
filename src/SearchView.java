@@ -187,7 +187,7 @@ public class SearchView extends JPanel {
 
         //Instantiate the enable fuzzy search checkbox
         enableFuzzySearch = new JCheckBox("Enable Fuzzy Search");
-        enableFuzzySearch.setBounds(20, 325, 150, 20);
+        enableFuzzySearch.setBounds(62, 317, 150, 20);
         add(enableFuzzySearch);
 
 
