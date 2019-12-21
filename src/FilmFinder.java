@@ -23,7 +23,7 @@ public class FilmFinder {
     private FilmFinder ()
     {
 
-        DBWizard.getInstance().setFileName();
+        DBWizard.getInstance().chooseFileName();
         m_MasterList = DBWizard.getInstance().readDB(); //Creates storage for movies
         m_UserProfile = new UserProfile();
         createWatchList();
