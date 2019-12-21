@@ -63,13 +63,13 @@ public class MainView extends JFrame
         add(SearchView.getInstance());
         add(ResultsView.getInstance());
 
+        //Instantiate FilmFinder and get desired filename
+        FilmFinder.getInstance();
+
         //Change appearance of JFrame
         setSize(800,500);//400 width and 500 height
         setLocationRelativeTo(null);
         setVisible(true);//making the frame visible
-
-        //Instantiate FilmFinder and get desired filename
-        FilmFinder.getInstance();
 
         //Preserve WatchList status when the program is closed
         setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
