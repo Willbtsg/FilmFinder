@@ -12,20 +12,52 @@ import org.json.simple.parser.ParseException;
 
 import javax.swing.*;
 
-public class DBWizard{
+public class DBWizard
+{
 
     //Set file name 
     public static String DBNAME;
 
     private static DBWizard instance;
 
-    public static void setFileName()
+    public static void inputFileName()
     {
         String filename = "data/";
 
-        filename += JOptionPane.showInputDialog("Please enter the name of the file you would like to use.");
+        filename += JOptionPane.showInputDialog(null,"What would you like to name your file?\n(Please include '.json' at the end of the name)", "Create a new file", JOptionPane.QUESTION_MESSAGE);
 
         DBNAME = filename;
+
+        return;
+    }
+
+    public static void chooseFileName()
+    {
+        String files[];
+        String filename = "data/";
+
+        File data = new File("data");
+
+        files = data.list();
+
+        filename += JOptionPane.showInputDialog(null, "Please select a file to use.","Select a file", JOptionPane.PLAIN_MESSAGE, null, files, files[0]);
+
+        DBNAME = filename;
+
+        return;
+
+    }
+
+    public static void setFileName()
+    {
+        int choice;
+
+        String[] options = {"Select a file.", "Create a new file."};
+
+        choice = JOptionPane.showOptionDialog(null, "Would you like to edit a pre-existing file, or create a new one?", "File Selection", JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
+
+        if (choice == 0) chooseFileName();
+        else inputFileName();
 
         return;
     }
@@ -81,7 +113,6 @@ public class DBWizard{
 
     /**
      * Reads the Master list of movies from the database
-     * @param None
      * @return An ArrayList of Movie objects
      *
      */
@@ -156,12 +187,8 @@ public class DBWizard{
         //MovieList.add(temp3);
         //MovieList.add(temp4);
 
-
-
         writeDB(MovieList);
 
-
-
         return;
-}
+    }
 }
