@@ -16,17 +16,13 @@ public class DBWizard
 {
 
     //Set file name 
-    public static String DBNAME;
+    public static String DBNAME = "data/";
 
     private static DBWizard instance;
 
     public static void inputFileName()
     {
-        String filename = "data/";
-
-        filename += JOptionPane.showInputDialog(null,"What would you like to name your file?\n(Please include '.json' at the end of the name)", "Create a new file", JOptionPane.QUESTION_MESSAGE);
-
-        DBNAME = filename;
+        DBNAME += JOptionPane.showInputDialog(null,"What would you like to name your file?\n(Please include '.json' at the end of the name)", "Create a new file", JOptionPane.QUESTION_MESSAGE);
 
         return;
     }
@@ -34,15 +30,11 @@ public class DBWizard
     public static void chooseFileName()
     {
         String files[];
-        String filename = "data/";
-
         File data = new File("data");
 
         files = data.list();
 
-        filename += JOptionPane.showInputDialog(null, "Please select a file to use.","Select a file", JOptionPane.PLAIN_MESSAGE, null, files, files[0]);
-
-        DBNAME = filename;
+        DBNAME += JOptionPane.showInputDialog(null, "Please select a file to use.","Select a file", JOptionPane.PLAIN_MESSAGE, null, files, files[0]);
 
         return;
 
@@ -57,7 +49,7 @@ public class DBWizard
         choice = JOptionPane.showOptionDialog(null, "Would you like to edit a pre-existing file, or create a new one?", "File Selection", JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
 
         if (choice == 0) chooseFileName();
-        else inputFileName();
+        else if (choice == 1) inputFileName();
 
         return;
     }
@@ -154,11 +146,13 @@ public class DBWizard
 
         setFileName();
 
+        if (DBNAME.equals("data/null") || DBNAME.equals("data/")) return;
+
+        Scanner reader = new Scanner(System.in);
+
         System.out.println("##########\nReading DB");
         ArrayList<Movie> MovieList = readDB();
-        
-        //Get user input
-        Scanner kb = new Scanner(System.in);
+        ArrayList<Movie> NewMovies = new ArrayList();
 
         System.out.println("\nPRINTING MOVIE LIST");
         for (Movie m: MovieList)
@@ -168,24 +162,23 @@ public class DBWizard
         }
         System.out.println("END MOVIE LIST");
 
-        System.out.println("Generating new movie");
-        Movie temp = Movie.createMovie();
-        //Movie temp1 = Movie.createMovie();
-        //Movie temp2 = Movie.createMovie();
-        //Movie temp3 = Movie.createMovie();
-        //Movie temp4 = Movie.createMovie();
-        System.out.println("Generated movie:");
-        System.out.println(temp);
-        //System.out.println(temp1);
-        //System.out.println(temp2);
-        //System.out.println(temp3);
-        //System.out.println(temp4);
+        System.out.println("How many movies would you like to add?");
+        int numMovies  = reader.nextInt();
 
-        MovieList.add(temp);
-        //MovieList.add(temp1);
-        //MovieList.add(temp2);
-        //MovieList.add(temp3);
-        //MovieList.add(temp4);
+        System.out.println("Generating new movie(s)");
+
+        for (int i = 0; i < numMovies; i++)
+        {
+            NewMovies.add(Movie.createMovie());
+        }
+
+        System.out.println("Generated movie(s):");
+
+        for (Movie temp : NewMovies)
+        {
+            System.out.println(temp);
+            MovieList.add(temp);
+        }
 
         writeDB(MovieList);
 
