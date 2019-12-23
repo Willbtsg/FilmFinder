@@ -63,7 +63,8 @@ public class MainView extends JFrame
         add(SearchView.getInstance());
         add(ResultsView.getInstance());
 
-        //Instantiate FilmFinder and get desired filename
+
+        if (!DBWizard.getInstance().chooseFileName()) System.exit(0);
         FilmFinder.getInstance();
 
         //Change appearance of JFrame

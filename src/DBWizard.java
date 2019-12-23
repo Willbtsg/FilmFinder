@@ -20,44 +20,10 @@ public class DBWizard
 
     private static DBWizard instance;
 
-    public static void inputFileName()
-    {
-        DBNAME += JOptionPane.showInputDialog(null,"What would you like to name your file?\n(Please include '.json' at the end of the name)", "Create a new file", JOptionPane.QUESTION_MESSAGE);
-
-        return;
-    }
-
-    public static void chooseFileName()
-    {
-        String files[];
-        File data = new File("data");
-
-        files = data.list();
-
-        DBNAME += JOptionPane.showInputDialog(null, "Please select a file to use.","Select a file", JOptionPane.PLAIN_MESSAGE, null, files, files[0]);
-
-        return;
-
-    }
-
-    public static void setFileName()
-    {
-        int choice;
-
-        String[] options = {"Select a file.", "Create a new file."};
-
-        choice = JOptionPane.showOptionDialog(null, "Would you like to edit a pre-existing file, or create a new one?", "File Selection", JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
-
-        if (choice == 0) chooseFileName();
-        else if (choice == 1) inputFileName();
-
-        return;
-    }
-
     private DBWizard()
     {
 
-    };
+    }
 
     public static DBWizard getInstance()
     {
@@ -67,6 +33,41 @@ public class DBWizard
         }
         return instance;
     }
+
+    public static boolean inputFileName()
+    {
+        DBNAME += JOptionPane.showInputDialog(null,"What would you like to name your file?\n(Please include '.json' at the end of the name)", "Create a new file", JOptionPane.QUESTION_MESSAGE);
+
+        if (DBNAME.contains("null")) { return false; }
+        else { return true; }
+    }
+
+    public static boolean chooseFileName()
+    {
+        String files[];
+        File data = new File("data");
+
+        files = data.list();
+
+        DBNAME += JOptionPane.showInputDialog(null, "Please select a file to use.","Select a file", JOptionPane.PLAIN_MESSAGE, null, files, files[0]);
+
+        if (DBNAME.contains("null")) { return false; }
+        else { return true; }
+    }
+
+    public static boolean setFileName()
+    {
+        int choice;
+
+        String[] options = {"Select a file.", "Create a new file."};
+
+        choice = JOptionPane.showOptionDialog(null, "Would you like to edit a pre-existing file, or create a new one?", "File Selection", JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
+
+        if (choice == 0) { return chooseFileName(); }
+        else if (choice == 1) { return inputFileName(); }
+        else { return false; }
+    }
+
 
     //Don't shoot me for this.
     //https://stackoverflow.com/a/53226346/5763413
@@ -144,9 +145,7 @@ public class DBWizard
     public static void main(String args[])
     {
 
-        setFileName();
-
-        if (DBNAME.equals("data/null") || DBNAME.equals("data/")) return;
+        if (!setFileName()) { return; }
 
         Scanner reader = new Scanner(System.in);
 
