@@ -12,4 +12,8 @@
 # -MainView now takes user to a dropdown menu with the files they can choose from, while DBWizard gives the user the option to create a new file instead.
 # -FuzzySearch toggle in SearchView has been shifted
 # -DBWizard now uses a loop to create a user-specified number of movies
-# -PartialSearch now includes modified comparisons for all fields. Levenshtein distances to be implemented later.
+# -PartialSearch now includes modified comparisons for all fields.
+
+# Features to be added:
+# -Merge PartialSearch and FuzzySearch classes to have both substring search and Levenshtein distance calculation.
+# -Implement GUI for DBWizard
