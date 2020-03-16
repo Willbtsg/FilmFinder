@@ -31,6 +31,42 @@ public class SearchBuilder {
         return instance;
     }
 
+
+    protected Boolean matchTitle(String title, Movie m)
+    {
+        return m.getTitle().toLowerCase().equals(title.toLowerCase());
+    }
+
+    protected Boolean matchDirector(String director, Movie m)
+    {
+        return m.getDirector().toLowerCase().equals(director.toLowerCase());
+    }
+
+    protected Boolean matchYear(int year, Movie m)
+    {
+        return m.getYear().equals(year);
+    }
+
+    protected Boolean matchRating(double rating, Movie m)
+    {
+        return m.getRating() < rating;
+    }
+
+    protected Boolean matchGenre(String genre, Movie m)
+    {
+        return m.getGenre().toLowerCase().equals(genre.toLowerCase());
+    }
+
+    protected Boolean matchActor(String actor, Movie m)
+    {
+        boolean match = false;
+        for (String mActor: m.getActors()) {
+            if (mActor.toLowerCase().equals(actor.toLowerCase())) match = true;
+        }
+
+        return match;
+    }
+
     /**
      * Searches through FilmFinder's MasterList of Movies according to the search constraints contained inside a single
      * Movie object's attributes. It sets the ResultsList inside of FilmFinder to whatever search finds, and
@@ -59,15 +95,6 @@ public class SearchBuilder {
         if(constraints.getRating().doubleValue() >= 0.0) ratingEmpty = false;
         if(!constraints.getGenre().isEmpty()) genreEmpty = false;
 
-        /* Debug on inputs
-        System.out.println(titleEmpty);
-        System.out.println(actorEmpty);
-        System.out.println(yearEmpty);
-        System.out.println(directorEmpty);
-        System.out.println(ratingEmpty);
-        System.out.println(genreEmpty);
-        */
-
         //STAGE2 searching FilmFinder.MasterList and Adding to results List---------------------------------------------------------------
 
         ArrayList<Movie> resultsList = new ArrayList<Movie>();
@@ -77,7 +104,7 @@ public class SearchBuilder {
         if (!titleEmpty) {
             //For each movie in FilmFinder, if movie's title matches constraints, add movie to resultsList
             for (Movie m : FilmFinder.getInstance().getMasterList()) {
-                if (m.getTitle().toLowerCase().equals(constraints.getTitle().toLowerCase())) resultsList.add(m);
+                if (matchTitle(constraints.getTitle(), m)) resultsList.add(m);
             }
         }
         else {
@@ -85,31 +112,28 @@ public class SearchBuilder {
             for (Movie m: FilmFinder.getInstance().getMasterList()) {
                 if (!directorEmpty){
                     //If FilmFinder movie does not conform, continue on to next movie
-                    if (!m.getDirector().toLowerCase().equals(constraints.getDirector().toLowerCase())) continue;
+                    if (!matchDirector(constraints.getDirector(), m)) continue;
                 }
                 if (!yearEmpty){
                     //If FilmFinder movie does not conform, continue on to next movie
-                    if (!m.getYear().equals(constraints.getYear())) continue;
+                    if (!matchYear(constraints.getYear(), m)) continue;
                 }
                 if (!ratingEmpty){
                     //If FilmFinder movie does not conform, continue on to next movie
-                    if (m.getRating() < constraints.getRating()) continue;
+                    if (matchRating(constraints.getRating(), m)) continue;
                 }
                 if (!genreEmpty){
                     //If FilmFinder movie does not conform, continue on to next movie
-                    if (!m.getGenre().toLowerCase().equals(constraints.getGenre().toLowerCase())) continue;
+                    if (!matchGenre(constraints.getGenre(), m)) continue;
                 }
                 if (!actorEmpty){
                     //If FilmFinder movie does not conform, continue on to next movie
                     //Iterate through each actor in movie.
                     //If no actors match the constraint, continue
                     //Else, add movie to list
-                    boolean conforms = false;
-                    for (String actor: m.getActors()) {
-                        if (actor.toLowerCase().equals(constraints.getActors().get(0).toLowerCase())) conforms = true;
-                    }
-                    if (!conforms) continue;
+                    if (!matchActor(constraints.getActors().get(0), m)) continue;
                 }
+                //If FilmFinder movie matches constraints or no constraints are entered, add the movie
                 resultsList.add(m);
             }
         }
@@ -133,7 +157,5 @@ public class SearchBuilder {
         }
         System.out.println("SearchBuilder: Search finished!");
     }
-
-
 
 }

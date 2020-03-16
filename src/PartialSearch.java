@@ -29,23 +29,15 @@ public class PartialSearch extends SearchBuilder{
 
         return instance;
     }
-    /**
-    */
-    private Boolean hasSubstringMatch(String master, String slave)
-    {
-        return master.toLowerCase().contains(slave.toLowerCase());
-    }
 
     /**
      * Compare titles
      */
-    private Boolean matchTitle(Movie m1, Movie m2)
+    @Override
+    protected Boolean matchTitle(String title, Movie m)
     {
-        if (hasSubstringMatch(m1.getTitle(), m2.getTitle()))
+        if (m.getTitle().toLowerCase().contains(title.toLowerCase()))
         {
-            System.out.println("Titles match");
-            System.out.println(m1.getTitle());
-            System.out.println(m2.getTitle());
             return true;
         }
         else
@@ -55,131 +47,39 @@ public class PartialSearch extends SearchBuilder{
 
     }
 
-
-    private Boolean matchDirector(Movie m1, Movie m2)
+    @Override
+    protected Boolean matchDirector(String director, Movie m)
     {
-        return (hasSubstringMatch(m1.getDirector(), m2.getDirector()));
+        return (m.getDirector().toLowerCase().contains(director.toLowerCase()));
     }
 
-    private Boolean matchGenre(Movie m1, Movie m2)
+    @Override
+    protected Boolean matchGenre(String genre, Movie m)
     {
-        return (hasSubstringMatch(m1.getGenre(), m2.getGenre()));
+        return (m.getGenre().toLowerCase().contains(genre.toLowerCase()));
     }
 
-    private Boolean matchActor(Movie m1, Movie m2)
+    @Override
+    protected Boolean matchActor(String actor, Movie m)
     {
         boolean conforms = false;
 
-        for (String actor: m1.getActors()) {
-            if (hasSubstringMatch(actor, m2.getActors().get(0))) conforms = true;
+        for (String mActor: m.getActors()) {
+            if (mActor.toLowerCase().contains(actor.toLowerCase())) conforms = true;
         }
 
         return conforms;
     }
 
     @Override
-    public void search(Movie searchMovie)
-    {
-        FilmFinder filmFinder = FilmFinder.getInstance(); //used to access Master Movie list
-        filmFinder.getResultsList().clear(); //clears all previous search results
-
-        ArrayList<Movie> MasterList = FilmFinder.getInstance().getMasterList();
-
-        ArrayList<Movie> matchList = new ArrayList<Movie>();
-
-        for (Movie m : MasterList)
-        {
-            Boolean add = false;
-            if (searchMovie.getTitle() != null)
-            {
-                if (matchTitle(m, searchMovie)) 
-                {
-                    add = true;
-                    System.out.printf("TITLE MATCHES\n");
-                }
-                else
-                {
-                    add = false;
-                    continue;
-                }
-
-            }
-
-            if (searchMovie.getDirector() != null)
-            {
-                if (matchDirector(m, searchMovie)) 
-                {
-                    add = true;
-                    System.out.printf("DIRECTOR MATCHES\n");
-                }
-                else
-                {
-                    add = false;
-                    continue;
-                }
-
-            }
-
-            if (searchMovie.getGenre() != null)
-            {
-                if (matchGenre(m, searchMovie)) 
-                {
-                    add = true;
-                    System.out.printf("GENRE MATCHES\n");
-                }
-                else
-                {
-                    add = false;
-                    continue;
-                }
-
-            }
-
-            if (!searchMovie.getActors().isEmpty())
-            {
-                if (matchActor(m, searchMovie))
-                {
-                    add = true;
-                    System.out.printf("ACTOR MATCHES\n");
-                }
-                else
-                {
-                    continue;
-                }
-            }
-
-            if (add) 
-            {
-                System.out.printf("Movie %s matched and added", m.getTitle());
-                matchList.add(m);
-            }
-        }
-        System.out.println("Printing all matched movies");
-
-        for (Movie m: matchList)
-        {
-            System.out.println(m.toString());
+    protected Boolean matchYear(int year, Movie m) {
+        boolean conforms = false;
+        if (m.getYear() <= year + 2 && m.getYear() >= year - 1) {
+            conforms = true;
         }
 
-        //Nothing was found
-        if(matchList.isEmpty())
-        {
-            //Create a movie object just for carrying a message.
-            ArrayList<String> emptyActorList = new ArrayList<String>();
-            Movie message = new Movie("No movies found with that search. Try again!\n", -1, "", emptyActorList, -1.0, "", false);
-            filmFinder.getResultsList().add(message); //send message Movie to ResultsView
-        }
-        else //Some movies were found! Copies results into FilmFinder's ResultsList attribute.
-        {
-            System.out.println("MOVIES FOUND");
-            for(Movie m : matchList)
-            {
-                filmFinder.getResultsList().add(m);
-            }
-        }
-        filmFinder.passResultsList();
+        return conforms;
     }
-
-
+    
 
 }
