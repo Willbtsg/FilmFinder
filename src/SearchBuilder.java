@@ -31,32 +31,69 @@ public class SearchBuilder {
         return instance;
     }
 
-
+    /**
+     * Checks to see if titles match
+     * @param title name of movie being searched for
+     * @param m movie whose title is being checked
+     * @return whether or not the titles match
+     */
     protected Boolean matchTitle(String title, Movie m)
     {
         return m.getTitle().toLowerCase().equals(title.toLowerCase());
     }
 
+
+    /**
+     * checks to see if the ratings is at or above the cutoff
+     * @param rating value being used for comparison
+     * @param m movie whose value is being checked
+     * @return whether or not the ratings is high enough
+     */
+    protected Boolean matchRating(double rating, Movie m)
+    {
+        return m.getRating() <= rating;
+    }
+
+
+    /**
+     * Checks to see if directors match
+     * @param director name being searched for
+     * @param m movie whose director is being checked
+     * @return whether or not the titles match
+     */
     protected Boolean matchDirector(String director, Movie m)
     {
         return m.getDirector().toLowerCase().equals(director.toLowerCase());
     }
 
+    /**
+     * Checks to see if years match
+     * @param year value being searched for
+     * @param m movie whose year value is being checked
+     * @return whether or not the years match
+     */
     protected Boolean matchYear(int year, Movie m)
     {
         return m.getYear().equals(year);
     }
 
-    protected Boolean matchRating(double rating, Movie m)
-    {
-        return m.getRating() < rating;
-    }
-
+    /**
+     * checks to see if the genres match
+     * @param genre genre being searched for
+     * @param m movie whose genre is being checked
+     * @return whether or not the genres match
+     */
     protected Boolean matchGenre(String genre, Movie m)
     {
         return m.getGenre().toLowerCase().equals(genre.toLowerCase());
     }
 
+    /**
+     * checks to see if a given movie contains a given actor
+     * @param actor name being searched for
+     * @param m movie whose ActorList is being checked
+     * @return whether or not actor exists within m's ActorList
+     */
     protected Boolean matchActor(String actor, Movie m)
     {
         boolean match = false;
@@ -81,19 +118,19 @@ public class SearchBuilder {
 
         //Checks if constraint attribute has any valid values in it
         Boolean titleEmpty = true;
-        Boolean actorEmpty = true;
-        Boolean yearEmpty = true;
-        Boolean directorEmpty = true;
         Boolean ratingEmpty = true;
+        Boolean directorEmpty = true;
+        Boolean yearEmpty = true;
         Boolean genreEmpty = true;
+        Boolean actorEmpty = true;
 
         //STAGE 1: setting flags----------------------------------------------------------
         if(!constraints.getTitle().isEmpty()) titleEmpty = false;
-        if(!constraints.getActors().isEmpty()) actorEmpty = false;
-        if(constraints.getYear().intValue() > -1) yearEmpty = false;
-        if(!constraints.getDirector().isEmpty()) directorEmpty = false;
         if(constraints.getRating().doubleValue() >= 0.0) ratingEmpty = false;
+        if(!constraints.getDirector().isEmpty()) directorEmpty = false;
+        if(constraints.getYear().intValue() > -1) yearEmpty = false;
         if(!constraints.getGenre().isEmpty()) genreEmpty = false;
+        if(!constraints.getActors().isEmpty()) actorEmpty = false;
 
         //STAGE2 searching FilmFinder.MasterList and Adding to results List---------------------------------------------------------------
 
@@ -110,6 +147,10 @@ public class SearchBuilder {
         else {
             //For each movie in FilmFinder, if movie's description conforms to constraints, add movie to resultsList
             for (Movie m: FilmFinder.getInstance().getMasterList()) {
+                if (!ratingEmpty){
+                    //If FilmFinder movie does not conform, continue on to next movie
+                    if (matchRating(constraints.getRating(), m)) continue;
+                }
                 if (!directorEmpty){
                     //If FilmFinder movie does not conform, continue on to next movie
                     if (!matchDirector(constraints.getDirector(), m)) continue;
@@ -117,10 +158,6 @@ public class SearchBuilder {
                 if (!yearEmpty){
                     //If FilmFinder movie does not conform, continue on to next movie
                     if (!matchYear(constraints.getYear(), m)) continue;
-                }
-                if (!ratingEmpty){
-                    //If FilmFinder movie does not conform, continue on to next movie
-                    if (matchRating(constraints.getRating(), m)) continue;
                 }
                 if (!genreEmpty){
                     //If FilmFinder movie does not conform, continue on to next movie
