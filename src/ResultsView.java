@@ -101,9 +101,10 @@ public class ResultsView extends JPanel
      *  Whenever a new item from m_results is selected, m_movieInfo and m_posterSpace are updated with the information and poster for that Movie
      *
      * @param passMovies: ArrayList containing Movie objects whose info needs to be displayed
+     * @param DBWizard: there will only be arguments here if this functoin was called by DBWizard
      *
      */
-    public void showMoviesText(ArrayList<Movie> passMovies) {
+    public void showMoviesText(ArrayList<Movie> passMovies, int ... DBWizard) {
 
         int i = 0; //used to iterate through arrays when adding new objects
         m_titles = new String[passMovies.size()]; //create String array of movie titles to put in the JList
@@ -195,20 +196,27 @@ public class ResultsView extends JPanel
             }
         });
 
-        m_toggleWatchList.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent actionEvent) {
-                try {
-                    if (m_descriptions[m_results.getSelectedIndex()].contains("WatchList: false")) {
-                        FilmFinder.getInstance().addWatchList((String) m_results.getSelectedValue()); //add the Movie if it isn't in the WatchList...
-                    } else {
-                        FilmFinder.getInstance().removeWatchList((String) m_results.getSelectedValue()); //...and remove the Movie if it is
+        if(DBWizard.length == 0) //if movies are being displayed for a search (not for DBWizard), activate the onWatchList toggle
+        {
+            m_toggleWatchList.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent actionEvent) {
+                    try {
+                        if (m_descriptions[m_results.getSelectedIndex()].contains("WatchList: false")) {
+                            FilmFinder.getInstance().addWatchList((String) m_results.getSelectedValue()); //add the Movie if it isn't in the WatchList...
+                        } else {
+                            FilmFinder.getInstance().removeWatchList((String) m_results.getSelectedValue()); //...and remove the Movie if it is
+                        }
+                    } catch (IndexOutOfBoundsException e) {
+                        return;
                     }
-                } catch (IndexOutOfBoundsException e) {
-                    return;
-                }
 
-            }
-        });
+                }
+            });
+        }
+        else{
+            remove(m_toggleWatchList);
+            remove(m_showWatchList);
+        }
 
     }
 
