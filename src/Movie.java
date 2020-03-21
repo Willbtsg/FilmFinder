@@ -24,7 +24,7 @@ class Movie {
 
     /**
      * Constructor to create movie from a json object
-     * @param JSON object with movie information
+     * @param j- JSON object with movie information
      * @return n/a
      */
     public Movie(JSONObject j)
@@ -48,7 +48,6 @@ class Movie {
     }
     /**
      * Tester function to create a movie from keyboard input
-     * @param None
      * @return a movie object created from keyboard input
      */
     public static Movie createMovie()
@@ -118,7 +117,6 @@ class Movie {
     
     /**
      * Returns a string representation of the movie with all applicable information
-     * @param None
      * @return A String representing the movie
      */
     public String toString()
@@ -139,7 +137,6 @@ class Movie {
     @SuppressWarnings("unchecked")
     /**
      * Creates a JSONObject of the movie
-     * @param None
      * @return a JSONObject
      *
      */
@@ -172,7 +169,6 @@ class Movie {
 
     /**
      * Returns the title of the movie
-     * @param None
      * @return String of title
      */
     public String getTitle()
@@ -182,7 +178,6 @@ class Movie {
 
     /**
      * Returns the release year of the movie
-     * @param None
      * @return Integer of release year
      */
     public Integer getYear()
@@ -192,7 +187,6 @@ class Movie {
 
     /**
      * Returns the director of the movie
-     * @param None
      * @return String of director
      */
     public String getDirector()
@@ -202,7 +196,6 @@ class Movie {
 
     /**
      * Returns the actors of the movie
-     * @param None
      * @return ArrayList<String> of actors
      */
     public ArrayList<String> getActors()
@@ -212,7 +205,6 @@ class Movie {
     
     /**
      * Returns the rating of the movie
-     * @param None
      * @return A double with the rating of the movie
      */
     public Double getRating()
@@ -222,7 +214,6 @@ class Movie {
 
     /**
      * Returns the genre of the movie
-     * @param None
      * @return String of genre
      */
     public String getGenre()
@@ -232,14 +223,13 @@ class Movie {
 
     /**
      * Gets the watchlist status of the movie
-     * @param none
      * @return Boolean 
      */
     public Boolean getWatchList() { return m_onWatchList; }
     
     /**
      * Sets the watchlist status of the movie
-     * @param Boolean new value to be set 
+     * @param newValue Boolean value for WatchList status
      * @return None
      */
     public void setWatchList(Boolean newValue) { m_onWatchList = newValue; }
