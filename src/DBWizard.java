@@ -1,9 +1,9 @@
+import java.awt.*;
 import java.io.*;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.Scanner;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -38,8 +38,7 @@ public class DBWizard
     {
         DBNAME += JOptionPane.showInputDialog(null,"What would you like to name your file?\n(Please include '.json' at the end of the name)", "Create a new file", JOptionPane.QUESTION_MESSAGE);
 
-        if (DBNAME.contains("null")) { return false; }
-        else { return true; }
+        return !DBNAME.contains("null");
     }
 
     public static boolean chooseFileName()
@@ -51,8 +50,7 @@ public class DBWizard
 
         DBNAME += JOptionPane.showInputDialog(null, "Please select a file to use.","Select a file", JOptionPane.PLAIN_MESSAGE, null, files, files[0]);
 
-        if (DBNAME.contains("null")) { return false; }
-        else { return true; }
+        return !DBNAME.contains("null");
     }
 
     public static boolean setFileName()
@@ -147,12 +145,10 @@ public class DBWizard
 
         if (!setFileName()) { return; }
 
-        Scanner reader = new Scanner(System.in);
-
-        System.out.println("##########\nReading DB");
         ArrayList<Movie> MovieList = readDB();
         ArrayList<Movie> NewMovies = new ArrayList();
 
+        /*
         System.out.println("\nPRINTING MOVIE LIST");
         for (Movie m: MovieList)
         {
@@ -160,10 +156,29 @@ public class DBWizard
             System.out.println(); 
         }
         System.out.println("END MOVIE LIST");
+        */
 
-        System.out.println("How many movies would you like to add?");
-        int numMovies  = reader.nextInt();
+        //create a JFrame to display the movies already in the chosen database
+        JFrame showMovies = new JFrame();
+        showMovies.setTitle("Film Finder");
+        showMovies.setLayout(null);
+        showMovies.add(ResultsView.getInstance());
+        ResultsView.getInstance().setBounds(0, 0, 521, 450); //override default bounds for ResultsView
+        ResultsView.getInstance().setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY)); //override ResultsView's default border color so it blends with the background
+        showMovies.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        //Change appearance of JFrame
+        showMovies.setSize(521,450);//800 width and 500 height
+        ResultsView.getInstance().showMoviesText(MovieList, 1);
+        showMovies.setLocationRelativeTo(null);
+        showMovies.setVisible(true);//making the frame visible
 
+        //use a JOptionPane to see how many movies the user wants to create
+        showMovies.setTitle("DBWizard");
+        showMovies.setLayout(null);
+        Integer choices[] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+        Integer numMovies  = (Integer) JOptionPane.showInputDialog(null, "How many movies would you like to add?", "FilmFinder", JOptionPane.QUESTION_MESSAGE, null, choices, choices[0]);
+
+        if (numMovies == null) { return; }
         System.out.println("Generating new movie(s)");
 
         for (int i = 0; i < numMovies; i++)
