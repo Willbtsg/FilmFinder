@@ -118,7 +118,7 @@ public class ResultsView extends JPanel
         i = 0;
         for (Movie pass : passMovies)
         {
-            m_descriptions[i] = pass.toString(); //copy the toString() results o  every Movie in the ArrayList to the array of descriptions
+            m_descriptions[i] = pass.toString(); //copy the toString() results of every Movie in passMovies to the array of descriptions
             i++;
         }
 
